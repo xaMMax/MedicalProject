@@ -1,3 +1,2 @@
 venv
-ProjectA/static/*
-ProjectA/staticfiles/*
+docker-compose.yml
