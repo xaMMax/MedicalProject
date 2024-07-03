@@ -1,34 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode';
+import LogoutButton from './LogoutButton';
 
 function Dashboard() {
-  const [consultations, setConsultations] = useState([]);
+  const token = localStorage.getItem('token');
+  let isAdmin = false;
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    axios.get('http://localhost:8000/api/consultations/', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      setConsultations(response.data);
-    })
-    .catch(error => {
-      console.error('There was an error fetching the consultations!', error);
-    });
-  }, []);
+  if (token) {
+    const decoded = jwtDecode(token);
+    isAdmin = decoded.is_superuser || decoded.is_staff;
+  }
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <ul>
-        {consultations.map(consultation => (
-          <li key={consultation.id}>
-            {consultation.date} - {consultation.doctor.username}
-          </li>
-        ))}
-      </ul>
+    <div className="container mt-5">
+      <h2 className="text-center">User Dashboard</h2>
+      {isAdmin && (
+        <div className="text-center mt-3">
+          <Link to="/admin">
+            <button className="btn btn-primary me-2">Go to Admin Dashboard</button>
+          </Link>
+        </div>
+      )}
+      <div className="text-center mt-3">
+        <LogoutButton />
+      </div>
+      {/* Додайте інший контент дашборда тут */}
     </div>
   );
 }

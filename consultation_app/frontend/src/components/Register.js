@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Link} from "react-router-dom";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -10,7 +12,6 @@ function Register() {
     first_name: '',
     last_name: ''
   });
-
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -25,7 +26,6 @@ function Register() {
     axios.post('http://localhost:8000/api/register/', formData)
       .then(response => {
         console.log(response.data);
-        // Clear form and errors on successful registration
         setFormData({
           username: '',
           password: '',
@@ -46,21 +46,85 @@ function Register() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" name="username" placeholder="Username" onChange={handleChange} value={formData.username} />
-      {errors.username && <p>{errors.username}</p>}
-      <input type="email" name="email" placeholder="Email" onChange={handleChange} value={formData.email} />
-      {errors.email && <p>{errors.email}</p>}
-      <input type="password" name="password" placeholder="Password" onChange={handleChange} value={formData.password} />
-      {errors.password && <p>{errors.password}</p>}
-      <input type="password" name="password2" placeholder="Confirm Password" onChange={handleChange} value={formData.password2} />
-      {errors.password2 && <p>{errors.password2}</p>}
-      <input type="text" name="first_name" placeholder="First Name" onChange={handleChange} value={formData.first_name} />
-      {errors.first_name && <p>{errors.first_name}</p>}
-      <input type="text" name="last_name" placeholder="Last Name" onChange={handleChange} value={formData.last_name} />
-      {errors.last_name && <p>{errors.last_name}</p>}
-      <button type="submit">Register</button>
-    </form>
+    <div className="container mt-5">
+      <h2 className="text-center">Register</h2>
+      <form onSubmit={handleSubmit} className="mt-4">
+        <div className="mb-3">
+          <label htmlFor="username" className="form-label">Username</label>
+          <input
+            type="text"
+            name="username"
+            className="form-control"
+            placeholder="Username"
+            onChange={handleChange}
+            value={formData.username}
+          />
+          {errors.username && <div className="text-danger">{errors.username}</div>}
+        </div>
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email</label>
+          <input
+            type="email"
+            name="email"
+            className="form-control"
+            placeholder="Email"
+            onChange={handleChange}
+            value={formData.email}
+          />
+          {errors.email && <div className="text-danger">{errors.email}</div>}
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">Password</label>
+          <input
+            type="password"
+            name="password"
+            className="form-control"
+            placeholder="Password"
+            onChange={handleChange}
+            value={formData.password}
+          />
+          {errors.password && <div className="text-danger">{errors.password}</div>}
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password2" className="form-label">Confirm Password</label>
+          <input
+            type="password"
+            name="password2"
+            className="form-control"
+            placeholder="Confirm Password"
+            onChange={handleChange}
+            value={formData.password2}
+          />
+          {errors.password2 && <div className="text-danger">{errors.password2}</div>}
+        </div>
+        <div className="mb-3">
+          <label htmlFor="first_name" className="form-label">First Name</label>
+          <input
+            type="text"
+            name="first_name"
+            className="form-control"
+            placeholder="First Name"
+            onChange={handleChange}
+            value={formData.first_name}
+          />
+          {errors.first_name && <div className="text-danger">{errors.first_name}</div>}
+        </div>
+        <div className="mb-3">
+          <label htmlFor="last_name" className="form-label">Last Name</label>
+          <input
+            type="text"
+            name="last_name"
+            className="form-control"
+            placeholder="Last Name"
+            onChange={handleChange}
+            value={formData.last_name}
+          />
+          {errors.last_name && <div className="text-danger">{errors.last_name}</div>}
+        </div>
+        <button type="submit" className="btn btn-primary w-100 mb-3">Register</button>
+        <Link to="/" className="btn btn-secondary w-100">Back to Home</Link>
+      </form>
+    </div>
   );
 }
 

@@ -3,5 +3,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('consultations.urls')),  # Включаємо маршрути з consultations
+    path('api/', include('consultations.urls')),
 ]

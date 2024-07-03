@@ -1,12 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, Consultation
+from .models import CustomUser
 
 
 class CustomUserAdmin(UserAdmin):
-    model = CustomUser
-    list_display = ('username', 'email', 'is_doctor', 'is_user', 'is_staff')
-    list_filter = ('is_doctor', 'is_user', 'is_staff')
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
@@ -17,20 +14,9 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'is_doctor', 'is_user')}
-         ),
+            'fields': ('username', 'password1', 'password2', 'is_doctor', 'is_user'),
+        }),
     )
-    search_fields = ('username', 'email')
-    ordering = ('username',)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
-
-
-class ConsultationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'doctor', 'date', 'notes')
-    list_filter = ('doctor', 'date')
-    search_fields = ('user__username', 'doctor__username', 'date')
-
-
-admin.site.register(Consultation, ConsultationAdmin)

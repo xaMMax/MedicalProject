@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode';
+import { useNavigate, Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login() {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,19 +27,50 @@ function Login() {
         const decoded = jwtDecode(token);
         console.log('User authenticated:', decoded);
         localStorage.setItem('token', token);
-        navigate('/dashboard'); // Перенаправлення користувача на дашборд після успішного логіну
+        navigate('/dashboard');
       })
       .catch(error => {
-        console.error('There was an error!', error);
+        if (error.response && error.response.data) {
+          setErrors(error.response.data);
+        } else {
+          console.error('There was an error!', error);
+        }
       });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" name="username" placeholder="Username" onChange={handleChange} />
-      <input type="password" name="password" placeholder="Password" onChange={handleChange} />
-      <button type="submit">Login</button>
-    </form>
+    <div className="container mt-5">
+      <h2 className="text-center">Login</h2>
+      <form onSubmit={handleSubmit} className="mt-4">
+        <div className="mb-3">
+          <label htmlFor="username" className="form-label">Username</label>
+          <input
+            type="text"
+            name="username"
+            className="form-control"
+            placeholder="Username"
+            onChange={handleChange}
+            value={formData.username}
+          />
+          {errors.username && <div className="text-danger">{errors.username}</div>}
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">Password</label>
+          <input
+            type="password"
+            name="password"
+            className="form-control"
+            placeholder="Password"
+            onChange={handleChange}
+            value={formData.password}
+          />
+          {errors.password && <div className="text-danger">{errors.password}</div>}
+        </div>
+        <button type="submit" className="btn btn-primary w-100 mb-3">Login</button>
+        <Link to="/password-reset" className="btn btn-link w-100">Forgot Password?</Link>
+        <button onClick={() => navigate('/')} className="btn btn-secondary w-100">Back to Home</button>
+      </form>
+    </div>
   );
 }
 
