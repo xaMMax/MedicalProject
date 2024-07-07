@@ -1,4 +1,4 @@
 venv
 docker-compose.yml
 .idea
-.consultations_app/media/
+consultation_app/media
