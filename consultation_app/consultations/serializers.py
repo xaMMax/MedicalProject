@@ -46,7 +46,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'is_superuser', 'is_staff', 'is_doctor', 'is_user']
+        fields = ['id', 'username', 'email', 'phone', 'address', 'bio',
+                  'is_superuser', 'is_staff', 'is_doctor', 'is_user', 'photo']
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -62,9 +63,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class ConsultationSerializer(serializers.ModelSerializer):
+    doctor = serializers.StringRelatedField()
+    patient = serializers.StringRelatedField()
+
     class Meta:
         model = Consultation
-        fields = '__all__'
+        fields = ['id', 'doctor', 'patient', 'date', 'time', 'notes']
+        read_only_fields = ['doctor']  # Додаємо поле doctor як read_only
 
 
 class PasswordResetSerializer(serializers.Serializer):

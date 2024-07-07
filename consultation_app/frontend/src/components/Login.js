@@ -11,6 +11,8 @@ function Login() {
   });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
+
 
   const handleChange = (e) => {
     setFormData({
@@ -23,18 +25,20 @@ function Login() {
     e.preventDefault();
     axios.post('http://localhost:8000/api/token/', formData)
       .then(response => {
-        const token = response.data.access;
-        const decoded = jwtDecode(token);
-        console.log('User authenticated:', decoded);
-        localStorage.setItem('token', token);
-        navigate('/dashboard');
+        const { access } = response.data;
+        const decodedToken = jwtDecode(access);
+        localStorage.setItem('token', access);
+
+        if (decodedToken.is_superuser || decodedToken.is_staff) {
+          navigate('/admin');
+        } else if (decodedToken.is_doctor) {
+          navigate('/doctor-dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       })
       .catch(error => {
-        if (error.response && error.response.data) {
-          setErrors(error.response.data);
-        } else {
-          console.error('There was an error!', error);
-        }
+        setError('Invalid username or password');
       });
   };
 

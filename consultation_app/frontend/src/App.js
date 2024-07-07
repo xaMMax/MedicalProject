@@ -5,8 +5,8 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/AdminDashboard';
-import PasswordResetRequest from './components/PasswordResetRequest';
-import PasswordReset from './components/PasswordReset';
+import DoctorDashboard from './components/DoctorDashboard'; // Додано
+import UserProfile from './components/UserProfile'; // Додано
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -16,10 +16,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<ProtectedRoute component={Dashboard} />} />
-        <Route path="/admin" element={<ProtectedRoute component={AdminDashboard} />} />
-        <Route path="/password-reset" element={<PasswordResetRequest />} />
-        <Route path="/reset-password/:uid/:token" element={<PasswordReset />} />
+        <Route path="/dashboard" element={<ProtectedRoute element={Dashboard} />} />
+        <Route path="/admin" element={<ProtectedRoute element={AdminDashboard} adminRoute />} />
+        <Route path="/doctor-dashboard" element={<ProtectedRoute element={DoctorDashboard} doctorRoute />} />
+        <Route path="/profile" element={<ProtectedRoute element={UserProfile} />} />
       </Routes>
     </Router>
   );

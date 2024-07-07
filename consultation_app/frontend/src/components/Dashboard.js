@@ -22,7 +22,10 @@ function Dashboard() {
           </Link>
         </div>
       )}
-      <div className="text-center mt-3">
+      <div className="text-center mt-3 mb-3">
+        <Link to="/profile">
+          <button className="btn btn-primary me-2">Go to Profile</button>
+        </Link>
         <LogoutButton />
       </div>
       {/* Додайте інший контент дашборда тут */}

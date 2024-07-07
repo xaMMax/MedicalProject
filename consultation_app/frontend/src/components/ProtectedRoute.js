@@ -1,27 +1,35 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { Navigate, useLocation } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode'; // змінено імпорт
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
+const ProtectedRoute = ({ element: Element, adminRoute, doctorRoute, ...rest }) => {
   const token = localStorage.getItem('token');
   let isAuthenticated = false;
   let isAdmin = false;
+  let isDoctor = false;
 
   if (token) {
     const decoded = jwtDecode(token);
     isAuthenticated = true;
     isAdmin = decoded.is_superuser || decoded.is_staff;
+    isDoctor = decoded.is_doctor;
   }
+
+  const location = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" state={{ from: location }} />;
   }
 
-  if (rest.path === '/admin' && !isAdmin) {
+  if (adminRoute && !isAdmin) {
     return <Navigate to="/dashboard" />;
   }
 
-  return <Component {...rest} />;
+  if (doctorRoute && !isDoctor) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  return <Element {...rest} />;
 };
 
 export default ProtectedRoute;

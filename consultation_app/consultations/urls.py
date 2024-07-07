@@ -1,8 +1,10 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.urls import path
 from .views import (RegisterView, MyTokenObtainPairView, ConsultationListView, UserListView, UserDetailView,
-                    PasswordResetView, SetPasswordView, StatisticsView, CreateUserView)
-from rest_framework_simplejwt.views import TokenRefreshView
+                    PasswordResetView, StatisticsView, CreateUserView, DoctorConsultationListView,
+                    UserProfileView, PatientListView, DoctorConsultationDetailView, ConsultationListCreateView)
 
 urlpatterns = [
     path('create-user/', CreateUserView.as_view(), name='create-user'),
@@ -13,5 +15,12 @@ urlpatterns = [
     path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
     path('password-reset/', PasswordResetView.as_view(), name='password-reset'),
     path('password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password-reset-confirm'),
-    path('statistics/', StatisticsView.as_view(), name='statistics'),  # Додаємо маршрут для статистики
+    path('statistics/', StatisticsView.as_view(), name='statistics'),
+    path('patients/', PatientListView.as_view(), name='patient-list'),
+    path('doctor/consultations/', ConsultationListCreateView.as_view(), name='consultation-list-create'),
+    path('doctor/consultations/<int:pk>/', DoctorConsultationDetailView.as_view(), name='doctor-consultation-detail'),
+    path('user-profile/', UserProfileView.as_view(), name='user-profile'),
+
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
