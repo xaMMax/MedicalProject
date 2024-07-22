@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import LogoutButton from './LogoutButton';
-import { Modal, Button, Form, Container, Row, Col } from 'react-bootstrap';
-import CreateUser from './CreateUser';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import LogoutButton from "./LogoutButton";
+import { Modal, Button, Form, Container, Row, Col } from "react-bootstrap";
+import CreateUser from "./CreateUser";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { verifyToken } from "./tokenUtils";
 
 function AdminDashboard() {
   const [users, setUsers] = useState([]);
@@ -13,8 +14,8 @@ function AdminDashboard() {
   const [showCreateUser, setShowCreateUser] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
+    username: "",
+    email: "",
     is_superuser: false,
     is_staff: false,
     is_doctor: false
@@ -26,31 +27,27 @@ function AdminDashboard() {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    axios.get('http://localhost:8000/api/users/', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      setUsers(response.data);
-    })
-    .catch(error => {
-      console.error('There was an error fetching the users!', error);
-      setError(error);
-    });
+    const token = localStorage.getItem("token");
+    if (token) {
+      const headers = { Authorization: `Bearer ${token}` };
 
-    axios.get('http://localhost:8000/api/statistics/', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      setStatistics(response.data);
-    })
-    .catch(error => {
-      console.error('There was an error fetching the statistics!', error);
-    });
+      axios.get("http://localhost:8000/api/users/", { headers })
+        .then(response => {
+          setUsers(response.data);
+        })
+        .catch(error => {
+          console.error("There was an error fetching the users!", error);
+          setError(error);
+        });
+
+      axios.get("http://localhost:8000/api/statistics/", { headers })
+        .then(response => {
+          setStatistics(response.data);
+        })
+        .catch(error => {
+          console.error("There was an error fetching the statistics!", error);
+        });
+    }
   }, []);
 
   const handleEditClick = (user) => {
@@ -69,54 +66,48 @@ function AdminDashboard() {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value
     });
   };
 
   const handleEditSubmit = () => {
-    const token = localStorage.getItem('token');
-    axios.put(`http://localhost:8000/api/users/${selectedUser.id}/`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      setUsers(users.map(user => user.id === selectedUser.id ? response.data : user));
-      setShowEditModal(false);
-    })
-    .catch(error => {
-      console.error('There was an error updating the user!', error);
-    });
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
+
+    axios.put(`http://localhost:8000/api/users/${selectedUser.id}/`, formData, { headers })
+      .then(response => {
+        setUsers(users.map(user => user.id === selectedUser.id ? response.data : user));
+        setShowEditModal(false);
+      })
+      .catch(error => {
+        console.error("There was an error updating the user!", error);
+      });
   };
 
   const handleDeleteClick = (userId) => {
-    const token = localStorage.getItem('token');
-    axios.delete(`http://localhost:8000/api/users/${userId}/`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then(() => {
-      setUsers(users.filter(user => user.id !== userId));
-    })
-    .catch(error => {
-      console.error('There was an error deleting the user!', error);
-       });
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
+
+    axios.delete(`http://localhost:8000/api/users/${userId}/`, { headers })
+      .then(() => {
+        setUsers(users.filter(user => user.id !== userId));
+      })
+      .catch(error => {
+        console.error("There was an error deleting the user!", error);
+      });
   };
 
   const handlePasswordReset = (user) => {
-    const token = localStorage.getItem('token');
-    axios.post('http://localhost:8000/api/password-reset/', { email: user.email }, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      alert(`Password reset link sent to ${user.email}`);
-    })
-    .catch(error => {
-      console.error('There was an error sending the password reset link!', error);
-    });
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
+
+    axios.post("http://localhost:8000/api/password-reset/", { email: user.email }, { headers })
+      .then(response => {
+        alert(`Password reset link sent to ${user.email}`);
+      })
+      .catch(error => {
+        console.error("There was an error sending the password reset link!", error);
+      });
   };
 
   return (
@@ -124,8 +115,8 @@ function AdminDashboard() {
       <h2 className="text-center">Admin Dashboard</h2>
       {error && <div className="alert alert-danger">Error fetching users: {error.message}</div>}
       <div className="text-center mt-3 mb-3">
-        <Link to="/dashboard">
-          <button className="btn btn-primary me-2">Go to User Dashboard</button>
+        <Link to="/profile">
+          <button className="btn btn-primary me-2">Go to User Profile</button>
         </Link>
         <LogoutButton />
       </div>
@@ -156,7 +147,6 @@ function AdminDashboard() {
         </Col>
       </Row>
 
-      {/* Button to open the Create User offcanvas */}
       <div className="text-end mb-3">
         <Button variant="success" onClick={() => setShowCreateUser(true)}>Create New User</Button>
       </div>
@@ -181,9 +171,9 @@ function AdminDashboard() {
               <td>{user.id}</td>
               <td>{user.username}</td>
               <td>{user.email}</td>
-              <td>{user.is_superuser ? 'Yes' : 'No'}</td>
-              <td>{user.is_staff ? 'Yes' : 'No'}</td>
-              <td>{user.is_doctor ? 'Yes' : 'No'}</td>
+              <td>{user.is_superuser ? "Yes" : "No"}</td>
+              <td>{user.is_staff ? "Yes" : "No"}</td>
+              <td>{user.is_doctor ? "Yes" : "No"}</td>
               <td>
                 <button className="btn btn-warning me-2" onClick={() => handleEditClick(user)}>Edit</button>
                 <button className="btn btn-danger me-2" onClick={() => handleDeleteClick(user.id)}>Delete</button>
@@ -256,7 +246,6 @@ function AdminDashboard() {
         </Modal.Footer>
       </Modal>
     </Container>
-  );
-}
-
+        );
+      }
 export default AdminDashboard;

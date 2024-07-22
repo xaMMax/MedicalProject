@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode'; // змінено імпорт
+import {jwtDecode} from 'jwt-decode';
 
 const ProtectedRoute = ({ element: Element, adminRoute, doctorRoute, ...rest }) => {
   const token = localStorage.getItem('token');
@@ -22,11 +22,11 @@ const ProtectedRoute = ({ element: Element, adminRoute, doctorRoute, ...rest }) 
   }
 
   if (adminRoute && !isAdmin) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to="/user-dashboard" />;
   }
 
   if (doctorRoute && !isDoctor) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to="/user-dashboard" />;
   }
 
   return <Element {...rest} />;

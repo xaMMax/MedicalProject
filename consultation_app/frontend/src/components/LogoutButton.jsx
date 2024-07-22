@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from './Button';
 
-function LogoutButton() {
+const LogoutButton = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -9,11 +10,7 @@ function LogoutButton() {
     navigate('/');
   };
 
-  return (
-    <button onClick={handleLogout} className="btn btn-danger" style={{ margin: '8px 0' }}>
-      Logout
-    </button>
-  );
-}
+  return <Button onClick={handleLogout} label="Logout" variant="danger" />;
+};
 
 export default LogoutButton;

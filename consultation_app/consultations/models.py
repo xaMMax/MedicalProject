@@ -1,9 +1,6 @@
-import datetime
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.db import models
-from datetime import date, time
 from django.conf import settings
 from django.utils import timezone
 
@@ -18,6 +15,11 @@ class CustomUser(AbstractUser):
     groups = models.ManyToManyField(Group, related_name='customuser_set')
     user_permissions = models.ManyToManyField(Permission, related_name='customuser_set')
 
+    objects = BaseUserManager()
+
+    class Meta:
+        db_table = 'CustomUser'
+
     def __str__(self):
         return self.username
 
@@ -29,6 +31,19 @@ class Consultation(models.Model):
     date = models.DateField(default=timezone.now)
     time = models.TimeField(default=timezone.now)
     notes = models.TextField()
+    objects = BaseUserManager()
 
     def __str__(self):
         return f"Consultation with {self.patient} by Dr. {self.doctor} on {self.date} at {self.time}"
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(CustomUser, related_name='sent_messages', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(CustomUser, related_name='received_messages', on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    objects = BaseUserManager()
+
+    def __str__(self):
+        return f"Message from {self.sender} to {self.recipient}"

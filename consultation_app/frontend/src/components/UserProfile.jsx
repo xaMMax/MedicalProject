@@ -10,10 +10,13 @@ const UserProfile = () => {
   const [user, setUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
     phone: '',
     address: '',
     bio: '',
     photo: null,
+
   });
 
   const token = localStorage.getItem('token');
@@ -36,6 +39,8 @@ const UserProfile = () => {
         });
         setUser(response.data);
         setFormData({
+          first_name: response.data.first_name,
+          last_name: response.data.last_name,
           phone: response.data.phone,
           address: response.data.address,
           bio: response.data.bio,
@@ -45,7 +50,6 @@ const UserProfile = () => {
         console.error('Error fetching user data', error);
       }
     };
-
     fetchUserData();
   }, [token]);
 
@@ -75,6 +79,8 @@ const UserProfile = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const updatedFormData = new FormData();
+    updatedFormData.append('first_name', formData.first_name);
+    updatedFormData.append('last_name', formData.last_name);
     updatedFormData.append('phone', formData.phone);
     updatedFormData.append('address', formData.address);
     updatedFormData.append('bio', formData.bio);
@@ -120,12 +126,14 @@ const UserProfile = () => {
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">Profile Details</h5>
+              <p className="card-text"><strong>First name:</strong> {user.first_name}</p>
+              <p className="card-text"><strong>Last name:</strong> {user.last_name}</p>
               <p className="card-text"><strong>Phone:</strong> {user.phone}</p>
               <p className="card-text"><strong>Address:</strong> {user.address}</p>
               <p className="card-text"><strong>Bio:</strong> {user.bio}</p>
               <button className="btn btn-primary" onClick={handleEditClick}>Edit Profile</button>
               <div className="mt-3">
-                <Link to={isAdmin ? "/admin" : isDoctor ? "/doctor-dashboard" : "/dashboard"}>
+                <Link to={isAdmin ? "/admin" : isDoctor ? "/doctor-dashboard" : "/user-dashboard"}>
                   <button className="btn btn-secondary">Back to Dashboard</button>
                 </Link>
               </div>
@@ -133,7 +141,7 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
-      <LogoutButton />
+      <LogoutButton/>
 
       <Modal show={showModal} onHide={handleModalClose}>
         <Modal.Header closeButton>
@@ -141,6 +149,24 @@ const UserProfile = () => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleFormSubmit}>
+            <Form.Group className="mb-3" controlId="formFirstName">
+              <Form.Label>First Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleInputChange}
+              />
+            <Form.Group className="mb-3" controlId="formLastName">
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            </Form.Group>
             <Form.Group className="mb-3" controlId="formPhone">
               <Form.Label>Phone</Form.Label>
               <Form.Control

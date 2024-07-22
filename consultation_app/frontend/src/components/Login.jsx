@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
 import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { verifyToken } from "./tokenUtils";
 
 function Login() {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
-  const [errors, setErrors] = useState({});
+  const [errors] = useState({});
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-
 
   const handleChange = (e) => {
     setFormData({
@@ -26,15 +25,20 @@ function Login() {
     axios.post('http://localhost:8000/api/token/', formData)
       .then(response => {
         const { access } = response.data;
-        const decodedToken = jwtDecode(access);
-        localStorage.setItem('token', access);
 
-        if (decodedToken.is_superuser || decodedToken.is_staff) {
-          navigate('/admin');
-        } else if (decodedToken.is_doctor) {
-          navigate('/doctor-dashboard');
+        localStorage.setItem('token', access);
+        const decoded = verifyToken(access);
+        console.log('Welcome superuser ', decoded.is_superuser);
+        console.log('Welcome staff ',decoded.is_staff);
+        console.log('Welcome doctor ',decoded.is_doctor);
+        console.log('Welcome user ',decoded.is_user);
+
+        if (decoded.is_superuser || decoded.is_staff) {
+            navigate('/admin');
+        } else if (decoded.is_doctor) {
+            navigate('/doctor-dashboard');
         } else {
-          navigate('/dashboard');
+            navigate('/user-dashboard');
         }
       })
       .catch(error => {
@@ -45,6 +49,7 @@ function Login() {
   return (
     <div className="container mt-5">
       <h2 className="text-center">Login</h2>
+      {error && <div className="alert alert-danger text-center">{error}</div>}
       <form onSubmit={handleSubmit} className="mt-4">
         <div className="mb-3">
           <label htmlFor="username" className="form-label">Username</label>
