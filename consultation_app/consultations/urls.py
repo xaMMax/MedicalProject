@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.urls import path
-from .views import (RegisterView, MyTokenObtainPairView, ConsultationListView, UserListView, UserDetailView,
+from .views import (RegisterView, MyTokenObtainPairView, UserListView, UserDetailView,
                     PasswordResetView, StatisticsView, CreateUserView,
                     UserProfileView, PatientListView, DoctorConsultationDetailView, ConsultationListCreateView,
                     ConsultationCancelView, MessageListCreateView, MessageDetailView, check_session,
@@ -25,7 +25,8 @@ urlpatterns = [
     path('user-profile/', UserProfileView.as_view(), name='user-profile'),
     path('consultations/cancel/<int:pk>/', ConsultationCancelView.as_view(), name='consultation-cancel'),
     path('messages/', MessageListCreateView.as_view(), name='message-list-create'),
-    path('messages/<int:pk>/', MessageDetailView.as_view(), name='message-detail'),]
+    path('messages/<int:pk>/', MessageDetailView.as_view(), name='message-detail'),
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

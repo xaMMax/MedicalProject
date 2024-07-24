@@ -12,8 +12,19 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
-from django.utils.log import DEFAULT_LOGGING
-from django.conf import settings
+
+import django
+import sentry_sdk
+
+from decouple import config
+import dj_database_url
+
+DEBUG = config('DEBUG', default=False, cast=bool)
+SECRET_KEY = config('SECRET_KEY')
+DJANGO_SUPERUSER_USERNAME = config('DJANGO_SUPERUSER_USERNAME')
+DJANGO_SUPERUSER_EMAIL = config('DJANGO_SUPERUSER_EMAIL')
+DJANGO_SUPERUSER_PASSWORD = config('DJANGO_SUPERUSER_PASSWORD')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +39,8 @@ SECRET_KEY = 'django-insecure-$p7%sj(0k5sk48@w-@bok63184#jnz-!bjb846b_54!41_n4**
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.147.4']
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Application definition
@@ -45,6 +57,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
 ]
+
+MANAGEMENT_COMMANDS = {
+    'create_custom_superuser': 'consultations.management.commands.create_custom_superuser'
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,15 +99,19 @@ WSGI_APPLICATION = 'consultation_app.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "med_app_db",
-        "USER": "doctor",
-        "PASSWORD": "peniceline",
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
+    'default': dj_database_url.config(default=config('DATABASE_URL'))
 }
+
+# DATABASES = {
+#     'default': {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "med_app_db",
+#         "USER": "doctor",
+#         "PASSWORD": "peniceline",
+#         "HOST": "db",
+#         "PORT": "5432",
+#     }
+# }
 
 
 # Password validation
@@ -164,9 +184,6 @@ REST_FRAMEWORK = {
 SESSION_COOKIE_AGE = 1200  # seconds
 SESSION_SAVE_EVERY_REQUEST = False
 
-
-from datetime import timedelta
-
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -187,4 +204,34 @@ SIMPLE_JWT = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGGING = {}
+sentry_sdk.init(
+    dsn="https://e072c1d4072af65da20096586c0203c0@o4507651500408832.ingest.de.sentry.io/4507651501916240",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
+}
