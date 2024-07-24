@@ -18,7 +18,8 @@ function AdminDashboard() {
     email: "",
     is_superuser: false,
     is_staff: false,
-    is_doctor: false
+    is_doctor: false,
+    is_user: false
   });
   const [statistics, setStatistics] = useState({
     users_count: 0,
@@ -57,7 +58,8 @@ function AdminDashboard() {
       email: user.email,
       is_superuser: user.is_superuser,
       is_staff: user.is_staff,
-      is_doctor: user.is_doctor
+      is_doctor: user.is_doctor,
+      is_user: user.is_user,
     });
     setShowEditModal(true);
   };
@@ -162,6 +164,7 @@ function AdminDashboard() {
             <th>Superuser</th>
             <th>Staff</th>
             <th>Doctor</th>
+            <th>User</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -174,6 +177,7 @@ function AdminDashboard() {
               <td>{user.is_superuser ? "Yes" : "No"}</td>
               <td>{user.is_staff ? "Yes" : "No"}</td>
               <td>{user.is_doctor ? "Yes" : "No"}</td>
+              <td>{user.is_user ? "Yes" : "No"}</td>
               <td>
                 <button className="btn btn-warning me-2" onClick={() => handleEditClick(user)}>Edit</button>
                 <button className="btn btn-danger me-2" onClick={() => handleDeleteClick(user.id)}>Delete</button>
@@ -231,6 +235,15 @@ function AdminDashboard() {
                 name="is_doctor"
                 label="Doctor"
                 checked={formData.is_doctor}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+                        <Form.Group className="mb-3" controlId="formDoctor">
+              <Form.Check
+                type="checkbox"
+                name="is_user"
+                label="User"
+                checked={formData.is_user}
                 onChange={handleEditChange}
               />
             </Form.Group>

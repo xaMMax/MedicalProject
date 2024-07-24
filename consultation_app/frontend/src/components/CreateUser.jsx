@@ -5,7 +5,7 @@ import axios from 'axios';
 function CreateUser({ show, handleClose }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [password2, setPassword2] = useState('');  // Нове поле для підтвердження пароля
+    const [password2, setPassword2] = useState('');
     const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -13,31 +13,39 @@ function CreateUser({ show, handleClose }) {
     const [isUser, setIsUser] = useState(false);
     const [isStaff, setIsStaff] = useState(false);
     const [isSuperuser, setIsSuperuser] = useState(false);
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem('token');
+
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/create-user/', {
-                username: username,
-                password: password,
-                password2: password2,  // Додаємо поле password2 до запиту
-                email: email,
+            const response = await axios.post('http://localhost:8000/api/create-user/', {
+                username,
+                password,
+                password2,
+                email,
                 first_name: firstName,
                 last_name: lastName,
                 is_doctor: isDoctor,
                 is_user: isUser,
                 is_staff: isStaff,
                 is_superuser: isSuperuser,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
+
             console.log(response.data);
             alert('User created successfully!');
-            handleClose(); // Закрити шторку після успішного створення користувача
+            handleClose();
         } catch (error) {
             console.error('There was an error!', error);
             if (error.response && error.response.data) {
-                alert(JSON.stringify(error.response.data));
+                setError(JSON.stringify(error.response.data));
             } else {
-                alert('Error creating user');
+                setError('Error creating user');
             }
         }
     };
@@ -48,6 +56,7 @@ function CreateUser({ show, handleClose }) {
                 <Offcanvas.Title>Create New User</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
+                {error && <div className="alert alert-danger">{error}</div>}
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formUsername" className="mb-3">
                         <Form.Label>Username</Form.Label>

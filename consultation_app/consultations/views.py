@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import Consultation, CustomUser, Message
 from .serializers import (RegisterSerializer, MyTokenObtainPairSerializer, ConsultationSerializer, UserSerializer,
@@ -34,8 +34,19 @@ def check_session(request):
 
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
-    permission_classes = permissions.AllowAny
+    permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({
+                "user": RegisterSerializer(user, context=self.get_serializer_context()).data,
+                "message": "User created successfully"
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
