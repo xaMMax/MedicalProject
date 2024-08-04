@@ -10,7 +10,7 @@
 
   env:
     VENV_DIR: .venv
-    PIP_CACHE_DIR: ${{gitgub.workspace}}/.cache/pip
+    PIP_CACHE_DIR: ${{github.workspace}}/.cache/pip
 
   jobs:
     lint:
