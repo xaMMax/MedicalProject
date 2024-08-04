@@ -1,0 +1,34 @@
+  name: CI/CD for medical application
+
+  on:
+    push:
+      branches:
+        - deploy_iter_one
+    pull_request:
+      branches:
+        - deploy_iter_one
+
+  env:
+    VENV_DIR: .venv
+    PIP_CACHE_DIR: ${{gitgub.workspace}}/.cache/pip
+
+  jobs:
+    lint:
+      name: lint
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+        - name: Set up Python 3.12
+          uses: actions/setup=python@v2
+          with:
+            python-version: '3.12'
+        - name: Install Dependencies
+          run: |
+            python -m venv SENV_DIR source $VENV_DIR/bin/activate
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+        - name: Lint with flake8
+          run: |
+            pip install flake8
+            flake8
