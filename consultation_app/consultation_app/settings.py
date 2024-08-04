@@ -15,7 +15,6 @@ from pathlib import Path
 
 import django
 import sentry_sdk
-
 from decouple import config
 import dj_database_url
 
@@ -25,23 +24,15 @@ DJANGO_SUPERUSER_USERNAME = config('DJANGO_SUPERUSER_USERNAME')
 DJANGO_SUPERUSER_EMAIL = config('DJANGO_SUPERUSER_EMAIL')
 DJANGO_SUPERUSER_PASSWORD = config('DJANGO_SUPERUSER_PASSWORD')
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$p7%sj(0k5sk48@w-@bok63184#jnz-!bjb846b_54!41_n4**'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.147.4']
 CORS_ORIGIN_ALLOW_ALL = True
-
 
 # Application definition
 
@@ -52,10 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'csp',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'drf_yasg',
     'corsheaders',
     'consultations',
-    'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
+
 ]
 
 MANAGEMENT_COMMANDS = {
@@ -63,6 +57,7 @@ MANAGEMENT_COMMANDS = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,8 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    'csp.middleware.CSPMiddleware',
+
 ]
 
 ROOT_URLCONF = 'consultation_app.urls'
@@ -93,7 +88,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'consultation_app.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -132,7 +126,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -144,7 +137,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
@@ -155,8 +147,23 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", 'fonts.googleapis.com')
+CSP_SCRIPT_SRC = ("'self'", 'ajax.googleapis.com')
+
+SECURE_BROWSER_XSS_FILTER = False
+SECURE_CONTENT_TYPE_NOSNIFF = False
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False
+SECURE_SSL_REDIRECT = False  # True - увімкнення SSL
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+X_FRAME_OPTIONS = 'DENY'  # DENY
+
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "https://localhost:3000",
 ]
 
 # Email settings
@@ -168,7 +175,7 @@ EMAIL_HOST_USER = 'maks.t.test@gmail.com'
 EMAIL_HOST_PASSWORD = 'VfrcbvNt$nth2015'
 
 # URL for frontend
-FRONTEND_URL = 'http://localhost:3000'
+FRONTEND_URL = 'https://localhost:3000'
 
 AUTH_USER_MODEL = 'consultations.CustomUser'
 
@@ -176,9 +183,14 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '100/day',  # Кількість запитів на день для залогінених користувачів
+        'anon': '10/hour',  # Кількість запитів на годину для анонімних користувачів
+    },
 }
 
 SESSION_COOKIE_AGE = 1200  # seconds

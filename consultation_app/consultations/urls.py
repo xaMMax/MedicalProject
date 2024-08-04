@@ -1,31 +1,45 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.views import PasswordResetConfirmView
-from django.urls import path
-from .views import (RegisterView, MyTokenObtainPairView, UserListView, UserDetailView,
-                    PasswordResetView, StatisticsView, CreateUserView,
-                    UserProfileView, PatientListView, DoctorConsultationDetailView, ConsultationListCreateView,
-                    ConsultationCancelView, MessageListCreateView, MessageDetailView, check_session,
-                    ConsultationCreateView)
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from .views import CustomUserViewSet, ConsultationViewSet, MessageViewSet, RegisterView, UserProfileView, \
+    ChangePasswordView
+
+router = DefaultRouter()
+router.register(r'users', CustomUserViewSet)
+router.register(r'consultations', ConsultationViewSet)
+router.register(r'messages', MessageViewSet)
+
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Consultations API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
+
 
 urlpatterns = [
-    path('check-session/', check_session, name='check-session'),
-    path('consultations/', ConsultationCreateView.as_view(), name='create-consultation'),
-    path('create-user/', CreateUserView.as_view(), name='create-user'),
-    path('register/', RegisterView.as_view(), name='register'),
-    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('users/', UserListView.as_view(), name='user-list'),
-    path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
-    path('password-reset/', PasswordResetView.as_view(), name='password-reset'),
-    path('password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password-reset-confirm'),
-    path('statistics/', StatisticsView.as_view(), name='statistics'),
-    path('patients/', PatientListView.as_view(), name='patient-list'),
-    path('doctor/consultations/', ConsultationListCreateView.as_view(), name='consultation-list-create'),
-    path('doctor/consultations/<int:pk>/', DoctorConsultationDetailView.as_view(), name='doctor-consultation-detail'),
-    path('user-profile/', UserProfileView.as_view(), name='user-profile'),
-    path('consultations/cancel/<int:pk>/', ConsultationCancelView.as_view(), name='consultation-cancel'),
-    path('messages/', MessageListCreateView.as_view(), name='message-list-create'),
-    path('messages/<int:pk>/', MessageDetailView.as_view(), name='message-detail'),
+    path('', include(router.urls)),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/register/', RegisterView.as_view(), name='register'),
+    path('api/profile/', UserProfileView.as_view(), name='profile'),
+    path('api/change-password/', ChangePasswordView.as_view(), name='change_password'),
+    path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
 ]
 
 if settings.DEBUG:
