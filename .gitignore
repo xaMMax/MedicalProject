@@ -2,3 +2,4 @@ venv
 docker-compose.yml
 .idea
 consultation_app/media
+consultation_app/frontend
