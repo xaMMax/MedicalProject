@@ -13,7 +13,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-import django
 import sentry_sdk
 from decouple import config
 import dj_database_url

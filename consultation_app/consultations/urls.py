@@ -14,20 +14,15 @@ router.register(r'users', CustomUserViewSet)
 router.register(r'consultations', ConsultationViewSet)
 router.register(r'messages', MessageViewSet)
 
-
-schema_view = get_schema_view(
-   openapi.Info(
-      title="Consultations API",
-      default_version='v1',
-      description="Test description",
-      terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@snippets.local"),
-      license=openapi.License(name="BSD License"),
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
-)
-
+schema_view = get_schema_view(openapi.Info(title="Consultations API", default_version='v1',
+                                           description="Test description",
+                                           terms_of_service="https://www.google.com/policies/terms/",
+                                           contact=openapi.Contact(email="contact@snippets.local"),
+                                           license=openapi.License(name="BSD License"),
+                                           ),
+                              public=True,
+                              permission_classes=(permissions.AllowAny,),
+                              )
 
 urlpatterns = [
     path('', include(router.urls)),
