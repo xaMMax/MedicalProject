@@ -26,7 +26,6 @@
             python-version: '3.12'
         - name: Install Dependencies
           run: |
-            python -m venv SENV_DIR source $VENV_DIR/bin/activate
             python -m pip install --upgrade pip
             pip install -r requirements.txt
         - name: Lint with flake8
