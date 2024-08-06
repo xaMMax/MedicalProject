@@ -1,0 +1,20 @@
+name: Deploy Django project to pythonanywhere
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: run sh file (coming soon)
+        env:
+          PA_API_TOKEN: ${{ secrets.TOKEN }}
+          PA_API_USERNAME: ${{ secrets.USERNAME }}
+
+        run: |
+          curl -X POST -H "Authorization: TOKEN"\
+          -d ""\
+          "https:/www.pythonanywhere.com/api/vo/user/SPA_USERNAME/consoles" \
+          -d "command=/home/$PA_USERNAME/PA_UPDATE. sh"

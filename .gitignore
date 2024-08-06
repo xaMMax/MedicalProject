@@ -3,3 +3,5 @@ docker-compose.yml
 .idea
 consultation_app/media
 consultation_app/frontend
+.env
+consultation_app/.env
