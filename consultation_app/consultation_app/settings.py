@@ -96,14 +96,21 @@ WSGI_APPLICATION = 'consultation_app.wsgi.application'
 #     'default': dj_database_url.config(default=config('DATABASE_URL'))
 # }
 
+# DATABASES = {
+#     'default': {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "med_app_db",
+#         "USER": "doctor",
+#         "PASSWORD": "peniceline",
+#         "HOST": "localhost",
+#         "PORT": "",
+#     }
+# }
+
 DATABASES = {
     'default': {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "med_app_db",
-        "USER": "doctor",
-        "PASSWORD": "peniceline",
-        "HOST": "localhost",
-        "PORT": "",
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
