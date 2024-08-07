@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'csp',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
     'corsheaders',
     'consultations',
@@ -113,7 +114,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -200,7 +200,8 @@ REST_FRAMEWORK = {
     },
 }
 
-SESSION_COOKIE_AGE = 1200  # seconds
+# SESSION AGE 5 Minutes
+SESSION_COOKIE_AGE = 5 * 60  # seconds
 SESSION_SAVE_EVERY_REQUEST = False
 
 SIMPLE_JWT = {
