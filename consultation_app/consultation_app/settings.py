@@ -92,20 +92,20 @@ WSGI_APPLICATION = 'consultation_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL'))
-}
-
 # DATABASES = {
-#     'default': {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "med_app_db",
-#         "USER": "doctor",
-#         "PASSWORD": "peniceline",
-#         "HOST": "db",
-#         "PORT": "5432",
-#     }
+#     'default': dj_database_url.config(default=config('DATABASE_URL'))
 # }
+
+DATABASES = {
+    'default': {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "med_app_db",
+        "USER": "doctor",
+        "PASSWORD": "peniceline",
+        "HOST": "localhost",
+        "PORT": "",
+    }
+}
 
 
 # Password validation
