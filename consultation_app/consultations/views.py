@@ -1,3 +1,4 @@
+from django.views.generic import TemplateView
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
@@ -77,3 +78,7 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response({"detail": "Password updated successfully."}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Test_pageView(TemplateView):
+    template_name = "test_page.html"
