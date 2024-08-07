@@ -1,18 +1,24 @@
-name: Deploy Django project to pythonanywhere
+name: Deploy Django project to PythonAnywhere
 on:
   push:
     branches:
       - deploy_iter_three_mysql
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: run PA_UPDATE.sh on server
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run PA_UPDATE.sh on server
         env:
           PA_API_TOKEN: ${{ secrets.PA_API_TOKEN }}
           PA_API_USERNAME: ${{ secrets.PA_API_USERNAME }}
         run: |
+          echo "Token: $PA_API_TOKEN"
+          echo "Username: $PA_API_USERNAME"
           curl -X POST -H "Authorization: Token $PA_API_TOKEN" \
-          -d "" \
-          "https://www.pythonanywhere.com/api/v0/user/$PA_API_USERNAME/consoles/" \
-          -d "command=/home/$PA_API_USERNAME/PA_UPDATE.sh"
+          -d "command=/home/$PA_API_USERNAME/PA_UPDATE.sh" \
+          "https://www.pythonanywhere.com/api/v0/user/$PA_API_USERNAME/consoles/"
