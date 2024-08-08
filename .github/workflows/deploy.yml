@@ -14,21 +14,17 @@ jobs:
 
       - name: Run PA_UPDATE.sh on server
         env:
-#          PA_API_TOKEN: ${{ secrets.PA_API_TOKEN }}
-#          PA_API_USERNAME: ${{ secrets.PA_API_USERNAME }}
           PA_API_TOKEN: 1e8cfd9d3f8397c4289b3c9ed7bd41a7f31ef5c6
           PA_API_USERNAME: xammax
         run: |
           echo "Token: $PA_API_TOKEN"
           echo "Username: $PA_API_USERNAME"
-          curl -d "{'input': 'bash PA_UPDATE.sh\n'}" -H "Content-Type: application/json"\
+          curl -d "{\"input\": \"bash PA_UPDATE.sh\n\"}" -H "Content-Type: application/json" \
           -X POST -H "Authorization: Token $PA_API_TOKEN" \
           "https://www.pythonanywhere.com/api/v0/user/$PA_API_USERNAME/consoles/35065416/send_input"
 
       - name: reboot server
         env:
-#          PA_API_TOKEN: ${{ secrets.PA_API_TOKEN }}
-#          PA_API_USERNAME: ${{ secrets.PA_API_USERNAME }}
           PA_API_TOKEN: 1e8cfd9d3f8397c4289b3c9ed7bd41a7f31ef5c6
           PA_API_USERNAME: xammax
         run: |
@@ -36,4 +32,4 @@ jobs:
           echo "Username: $PA_API_USERNAME"
           curl -X POST -H "Authorization: Token $PA_API_TOKEN" \
           -H "Content-Type: application/json" \
-          "https://www.pythonanywhere.com/api/v0/user/xammax/webapps/xammax.pythonanywhere.com/reload/"
+          "https://www.pythonanywhere.com/api/v0/user/$PA_API_USERNAME/webapps/xammax.pythonanywhere.com/reload/"
