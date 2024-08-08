@@ -33,4 +33,4 @@ jobs:
           echo "Username: $PA_API_USERNAME"
           curl -X POST -H "Authorization: Token $PA_API_TOKEN" \
           -H "Content-Type: application/json" \
-          "https://www.pythonanywhere.com/api/v1/user/$PA_API_USERNAME/websites/{xammax.pythonanywhere.com}/reload/"
+          "https://www.pythonanywhere.com/api/v1/user/$PA_API_USERNAME/websites/xammax.pythonanywhere.com/reload/"
