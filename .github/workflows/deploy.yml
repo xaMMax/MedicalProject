@@ -14,8 +14,10 @@ jobs:
 
       - name: Run PA_UPDATE.sh on server
         env:
-          PA_API_TOKEN: ${{ secrets.PA_API_TOKEN }}
-          PA_API_USERNAME: ${{ secrets.PA_API_USERNAME }}
+#          PA_API_TOKEN: ${{ secrets.PA_API_TOKEN }}
+#          PA_API_USERNAME: ${{ secrets.PA_API_USERNAME }}
+          PA_API_TOKEN: 1e8cfd9d3f8397c4289b3c9ed7bd41a7f31ef5c6
+          PA_API_USERNAME: xammax
         run: |
           echo "Token: $PA_API_TOKEN"
           echo "Username: $PA_API_USERNAME"
@@ -26,8 +28,10 @@ jobs:
 
       - name: reboot server
         env:
-          PA_API_TOKEN: ${{ secrets.PA_API_TOKEN }}
-          PA_API_USERNAME: ${{ secrets.PA_API_USERNAME }}
+#          PA_API_TOKEN: ${{ secrets.PA_API_TOKEN }}
+#          PA_API_USERNAME: ${{ secrets.PA_API_USERNAME }}
+          PA_API_TOKEN: 1e8cfd9d3f8397c4289b3c9ed7bd41a7f31ef5c6
+          PA_API_USERNAME: xammax
         run: |
           echo "Token: $PA_API_TOKEN"
           echo "Username: $PA_API_USERNAME"
