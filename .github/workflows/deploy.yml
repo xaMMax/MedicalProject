@@ -16,7 +16,6 @@ jobs:
         run: |
           echo "Token: ${{ secrets.PA_API_TOKEN }}"
           echo "Username: ${{ secrets.PA_API_USERNAME }}"
-          curl -d "{'input': 'bash PA_UPDATE.sh\n'}"
           curl -XPOST -H 'Authorisation: Token ${{ secrets.PA_API_TOKEN }}' -H "Content-type: application/json"\ 
           -d '{"input":"bash PA_UPDATE.sh\n"}'\ 
           'https://www.pythonanywhere.com/api/v0/user/xammax/consoles/35065416/send_input/'
