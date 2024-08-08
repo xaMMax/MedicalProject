@@ -19,7 +19,7 @@ jobs:
         run: |
           echo "Token: $PA_API_TOKEN"
           echo "Username: $PA_API_USERNAME"
-          curl -d "{\"input\": \"bash PA_UPDATE.sh\n\"}" -H "Content-Type: application/json" \
+          curl -d "{\"input\":\"bash PA_UPDATE.sh\"}" -H "Content-Type: application/json" \
           -X POST -H "Authorization: Token $PA_API_TOKEN" \
           "https://www.pythonanywhere.com/api/v0/user/$PA_API_USERNAME/consoles/35065416/send_input"
 
