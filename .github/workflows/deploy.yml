@@ -20,11 +20,3 @@ jobs:
           -d "{\"input\":\"./PA_UPDATE.sh\n\"}" \
           "https://www.pythonanywhere.com/api/v0/user/${{ secrets.PA_API_USERNAME }}/consoles/35065416/send_input/"
 
-
-      - name: reboot server
-        run: |
-          echo "Token: ${{ secrets.PA_API_TOKEN }}"
-          echo "Username: ${{ secrets.PA_API_USERNAME }}"
-          curl -X POST -H "Authorization: Token ${{ secrets.PA_API_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          "https://www.pythonanywhere.com/api/v0/user/${{ secrets.PA_API_USERNAME }}/webapps/xammax.pythonanywhere.com/reload/"
