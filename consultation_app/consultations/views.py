@@ -13,19 +13,19 @@ CustomUser = get_user_model()
 
 
 class CustomUserViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
+    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
 
 class ConsultationViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
+    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
     queryset = Consultation.objects.all()
     serializer_class = ConsultationSerializer
 
 
 class MessageViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
+    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
@@ -51,7 +51,7 @@ class RegisterView(generics.CreateAPIView):
 
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
+    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
     queryset = CustomUser.objects.all()
     serializer_class = UserProfileSerializer
 
@@ -60,7 +60,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 
 class ChangePasswordView(generics.UpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
+    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
     serializer_class = ChangePasswordSerializer
     model = CustomUser
 
@@ -85,12 +85,12 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 
 class Test_pageView(TemplateView):
-    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
+    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
     template_name = "test_page.html"
 
 
 class MyAPIView(APIView):
-    permission_classes = [HasAPIKey]
+    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
 
     def get(self, request):
         return Response({"message": "Hello, World!"})
