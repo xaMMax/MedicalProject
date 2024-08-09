@@ -188,9 +188,13 @@ FRONTEND_URL = 'https://localhost:3000'
 AUTH_USER_MODEL = 'consultations.CustomUser'
 
 REST_FRAMEWORK = {
+
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework_api_key.permissions.HasAPIKey',
+    ],
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.UserRateThrottle',
         'rest_framework.throttling.AnonRateThrottle',

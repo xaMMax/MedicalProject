@@ -2,6 +2,9 @@ from django.views.generic import TemplateView
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
+from rest_framework.views import APIView
+from rest_framework_api_key.permissions import HasAPIKey
+
 from .models import Consultation, Message
 from .serializers import CustomUserSerializer, ConsultationSerializer, MessageSerializer, RegisterSerializer, \
     ChangePasswordSerializer, UserProfileSerializer
@@ -10,27 +13,28 @@ CustomUser = get_user_model()
 
 
 class CustomUserViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class ConsultationViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
     queryset = Consultation.objects.all()
     serializer_class = ConsultationSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class MessageViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(sender=self.request.user)
 
 
 class RegisterView(generics.CreateAPIView):
+    permission_classes = []
     serializer_class = RegisterSerializer
 
     def create(self, request, *args, **kwargs):
@@ -47,18 +51,18 @@ class RegisterView(generics.CreateAPIView):
 
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
     queryset = CustomUser.objects.all()
     serializer_class = UserProfileSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         return self.request.user
 
 
 class ChangePasswordView(generics.UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
     serializer_class = ChangePasswordSerializer
     model = CustomUser
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -81,4 +85,12 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 
 class Test_pageView(TemplateView):
+    permission_classes = [permissions.IsAuthenticated, HasAPIKey]
     template_name = "test_page.html"
+
+
+class MyAPIView(APIView):
+    permission_classes = [HasAPIKey]
+
+    def get(self, request):
+        return Response({"message": "Hello, World!"})
