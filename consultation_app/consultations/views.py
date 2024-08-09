@@ -13,7 +13,7 @@ CustomUser = get_user_model()
 
 
 class CustomUserViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
+    permission_classes = [HasAPIKey]
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
