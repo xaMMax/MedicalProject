@@ -2,7 +2,7 @@ name: Deploy Django project to PythonAnywhere
 on:
   push:
     branches:
-      - deploy_iter_three_mysql
+      - deploy_iter_four
 
 jobs:
   deploy:
