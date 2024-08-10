@@ -7,7 +7,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import CustomUserViewSet, ConsultationViewSet, MessageViewSet, RegisterView, UserProfileView, \
-    ChangePasswordView, Test_pageView
+    ChangePasswordView, Test_pageView, LoginView
 
 router = DefaultRouter()
 router.register(r'users', CustomUserViewSet)
@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/', LoginView.as_view(), name='login'),
     path('api/register/', RegisterView.as_view(), name='register'),
     path('api/profile/', UserProfileView.as_view(), name='profile'),
     path('api/change-password/', ChangePasswordView.as_view(), name='change_password'),

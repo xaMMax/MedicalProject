@@ -4,6 +4,10 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db import models
+from django.contrib.auth.models import Group, Permission
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
@@ -28,6 +32,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)  # Make email unique
     is_doctor = models.BooleanField(default=False)
     is_user = models.BooleanField(default=False)
     phone = models.CharField(max_length=15, blank=True, null=True)
@@ -37,13 +42,16 @@ class CustomUser(AbstractUser):
     groups = models.ManyToManyField(Group, related_name='customuser_set')
     user_permissions = models.ManyToManyField(Permission, related_name='customuser_set')
 
+    USERNAME_FIELD = 'email'  # Вказуємо, що для логування використовується email
+    REQUIRED_FIELDS = ['username']  # username залишається обов'язковим для суперкористувачів
+
     objects = CustomUserManager()
 
     class Meta:
         db_table = 'CustomUser'
 
     def __str__(self):
-        return self.username
+        return self.email
 
 
 class Consultation(models.Model):

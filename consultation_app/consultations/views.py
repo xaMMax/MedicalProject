@@ -7,7 +7,7 @@ from rest_framework_api_key.permissions import HasAPIKey
 
 from .models import Consultation, Message
 from .serializers import CustomUserSerializer, ConsultationSerializer, MessageSerializer, RegisterSerializer, \
-    ChangePasswordSerializer, UserProfileSerializer
+    ChangePasswordSerializer, UserProfileSerializer, LoginSerializer
 
 CustomUser = get_user_model()
 
@@ -48,6 +48,16 @@ class RegisterView(generics.CreateAPIView):
             },
             status=status.HTTP_201_CREATED,
         )
+
+
+class LoginView(APIView):
+    permission_classes = []
+
+    def post(self, request, *args, **kwargs):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        token_data = serializer.save()
+        return Response(token_data, status=status.HTTP_200_OK)
 
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
