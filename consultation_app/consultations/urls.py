@@ -28,14 +28,14 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('login/', LoginView.as_view(), name='login'),
+    path('api/login/', LoginView.as_view(), name='login'),
     path('api/register/', RegisterView.as_view(), name='register'),
     path('api/profile/', UserProfileView.as_view(), name='profile'),
     path('api/change-password/', ChangePasswordView.as_view(), name='change_password'),
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('test', Test_pageView.as_view(), name='test'),
+    path('api/home/', Test_pageView.as_view(), name='test'),
 
 ]
 
