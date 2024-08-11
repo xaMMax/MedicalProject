@@ -79,6 +79,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ('username', 'email', 'password', 'is_doctor', 'is_user', 'phone', 'address', 'bio', 'photo')
 
     def create(self, validated_data):
+        # Створюємо користувача
         user = CustomUser.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -90,6 +91,14 @@ class RegisterSerializer(serializers.ModelSerializer):
             bio=validated_data.get('bio', ''),
             photo=validated_data.get('photo', None),
         )
+
+        if user.is_doctor:
+            doctor_group, created = Group.objects.get_or_create(name='Doctors')
+            user.groups.add(doctor_group)
+        elif user.is_user:
+            user_group, created = Group.objects.get_or_create(name='Users')
+            user.groups.add(user_group)
+
         return user
 
 
