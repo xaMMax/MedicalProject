@@ -95,11 +95,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
 
         if user.is_doctor:
-            doctor_group, created = Group.objects.get_or_create(name='Doctors')
-            user.groups.add(doctor_group)
+            doctors, created = Group.objects.get_or_create(name='doctors')
+            user.groups.add(doctors)
         elif user.is_user:
-            user_group, created = Group.objects.get_or_create(name='Users')
-            user.groups.add(user_group)
+            users, created = Group.objects.get_or_create(name='users')
+            user.groups.add(users)
 
         return user
 
