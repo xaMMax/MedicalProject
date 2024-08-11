@@ -90,6 +90,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             address=validated_data.get('address', ''),
             bio=validated_data.get('bio', ''),
             photo=validated_data.get('photo', None),
+            groups=validated_data.get('groups', []),
+            user_permissions=validated_data.get('user_permissions', [])
         )
 
         if user.is_doctor:
