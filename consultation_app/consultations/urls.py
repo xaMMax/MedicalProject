@@ -25,7 +25,7 @@ schema_view = get_schema_view(openapi.Info(title="Consultations API", default_ve
                               )
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/login/', LoginView.as_view(), name='login'),
