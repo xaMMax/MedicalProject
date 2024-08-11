@@ -33,6 +33,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     groups = serializers.StringRelatedField(many=True)
+    user_permissions = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = CustomUser
