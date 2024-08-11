@@ -2,6 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import Group
 
 from .models import Consultation, Message
 
@@ -31,6 +32,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    groups = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = CustomUser
         fields = ['username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address', 'bio',
