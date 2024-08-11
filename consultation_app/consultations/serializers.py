@@ -71,6 +71,9 @@ class MessageSerializer(serializers.ModelSerializer):
         ]
 
 
+from django.contrib.auth.models import Group
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
 
@@ -79,7 +82,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ('username', 'email', 'password', 'is_doctor', 'is_user', 'phone', 'address', 'bio', 'photo')
 
     def create(self, validated_data):
-        # Створюємо користувача
         user = CustomUser.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -90,16 +92,15 @@ class RegisterSerializer(serializers.ModelSerializer):
             address=validated_data.get('address', ''),
             bio=validated_data.get('bio', ''),
             photo=validated_data.get('photo', None),
-            groups=validated_data.get('groups', []),
-            user_permissions=validated_data.get('user_permissions', [])
         )
 
+        # Додаємо користувача до відповідної групи автоматично
         if user.is_doctor:
-            doctors, created = Group.objects.get_or_create(name='doctors')
-            user.groups.add(doctors)
-        elif user.is_user:
-            users, created = Group.objects.get_or_create(name='users')
-            user.groups.add(users)
+            doctor_group, created = Group.objects.get_or_create(name='Doctors')
+            user.groups.add(doctor_group)
+        if user.is_user:
+            user_group, created = Group.objects.get_or_create(name='Users')
+            user.groups.add(user_group)
 
         return user
 
