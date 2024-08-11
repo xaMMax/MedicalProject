@@ -30,6 +30,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
         )
         return user
 
+    def update(self, instance, validated_data):
+        photo = validated_data.pop('photo', None)
+        if photo:
+            instance.photo = photo
+        return super().update(instance, validated_data)
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
     groups = serializers.StringRelatedField(many=True)
@@ -37,7 +43,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address', 'bio',
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address',
+                  'bio',
                   'photo', 'groups', 'user_permissions']
         extra_kwargs = {
             'password': {'write_only': True}
