@@ -50,6 +50,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
+    def update(self, instance, validated_data):
+        photo = validated_data.pop('photo', None)
+        if photo:
+            instance.photo = photo
+        return super().update(instance, validated_data)
+
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
