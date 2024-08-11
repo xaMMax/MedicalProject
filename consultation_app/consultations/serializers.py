@@ -2,7 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 
 from .models import Consultation, Message
 
@@ -10,8 +10,9 @@ CustomUser = get_user_model()
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    groups = serializers.StringRelatedField(many=True)
-    user_permissions = serializers.StringRelatedField(many=True)
+    groups = serializers.PrimaryKeyRelatedField(many=True, queryset=Group.objects.all())
+    user_permissions = serializers.PrimaryKeyRelatedField(many=True, queryset=Permission.objects.all())
+
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address', 'bio',
