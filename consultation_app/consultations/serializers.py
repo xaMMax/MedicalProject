@@ -100,12 +100,12 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             email=validated_data['email'],
             password=validated_data['password'],
-            is_doctor=validated_data.get('is_doctor', False),
-            is_user=validated_data.get('is_user', True),
-            phone=validated_data.get('phone', ''),
-            address=validated_data.get('address', ''),
-            bio=validated_data.get('bio', ''),
-            photo=validated_data.get('photo', None),
+            # is_doctor=validated_data.get('is_doctor', False),
+            # is_user=validated_data.get('is_user', True),
+            # phone=validated_data.get('phone', ''),
+            # address=validated_data.get('address', ''),
+            # bio=validated_data.get('bio', ''),
+            # photo=validated_data.get('photo', None),
         )
         return user
 
