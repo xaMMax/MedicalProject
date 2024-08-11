@@ -14,7 +14,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     user_permissions = serializers.StringRelatedField(many=True)
     class Meta:
         model = CustomUser
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address', 'bio',
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address', 'bio',
                   'photo', 'groups', 'user_permissions']
         extra_kwargs = {
             'password': {'write_only': True}
@@ -36,7 +36,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address', 'bio',
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address', 'bio',
                   'photo', 'groups', 'user_permissions']
         extra_kwargs = {
             'password': {'write_only': True}
