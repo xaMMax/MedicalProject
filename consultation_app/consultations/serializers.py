@@ -32,13 +32,25 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    groups = serializers.StringRelatedField(many=True)
-    user_permissions = serializers.StringRelatedField(many=True)
-
     class Meta:
         model = CustomUser
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address', 'bio',
-                  'photo', 'groups', 'user_permissions']
+        fields = [
+            'id', 'username', 'email', 'is_doctor', 'is_user',
+            'phone', 'address', 'bio', 'photo', 'groups',
+            'user_permissions'
+        ]
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(
+            email=validated_data['email'],
+            username=validated_data['username'],
+            password=validated_data['password'],
+            **validated_data
+        )
+        return user
 
 
 class ChangePasswordSerializer(serializers.Serializer):
