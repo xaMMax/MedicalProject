@@ -10,6 +10,8 @@ CustomUser = get_user_model()
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    groups = serializers.StringRelatedField(many=True)
+    user_permissions = serializers.StringRelatedField(many=True)
     class Meta:
         model = CustomUser
         fields = ['username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address', 'bio',
@@ -28,14 +30,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return user
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer, CustomUserSerializer):
     groups = serializers.StringRelatedField(many=True)
     user_permissions = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address', 'bio',
-                  'photo', 'groups', 'user_permissions']
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -66,9 +66,6 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'sender', 'recipient', 'content', 'created_at', 'is_read'
         ]
-
-
-from django.contrib.auth.models import Group
 
 
 class RegisterSerializer(serializers.ModelSerializer):
