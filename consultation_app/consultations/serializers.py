@@ -80,7 +80,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('username', 'email', 'password', 'is_doctor', 'is_user', 'phone',
-                  'address', 'bio', 'photo', 'group', 'user_permissions')
+                  'address', 'bio', 'photo')
 
     def create(self, validated_data):
         user = CustomUser.objects.create_user(
@@ -94,14 +94,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             bio=validated_data.get('bio', ''),
             photo=validated_data.get('photo', None),
         )
-
-        if user.is_doctor:
-            doctor_group, created = Group.objects.get_or_create(name='Doctors')
-            user.groups.add(doctor_group)
-        if user.is_user:
-            user_group, created = Group.objects.get_or_create(name='Users')
-            user.groups.add(user_group)
-
         return user
 
 
