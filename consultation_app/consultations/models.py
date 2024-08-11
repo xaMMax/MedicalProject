@@ -40,7 +40,7 @@ class CustomUser(AbstractUser):
     bio = models.TextField(blank=True, null=True)
     photo = models.ImageField(upload_to='photos/', blank=True, null=True)
     groups = models.ManyToManyField(Group, related_name='customuser_set')
-    user_permissions = models.ManyToManyField(Permission, related_name='customuser_set')
+    user_permissions = models.ManyToManyField(Permission, related_name='customuser_set', blank=True)
 
     USERNAME_FIELD = 'email'  # Вказуємо, що для логування використовується email
     REQUIRED_FIELDS = ['username']  # username залишається обов'язковим для суперкористувачів

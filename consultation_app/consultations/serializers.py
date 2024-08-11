@@ -94,7 +94,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             photo=validated_data.get('photo', None),
         )
 
-        # Додаємо користувача до відповідної групи автоматично
         if user.is_doctor:
             doctor_group, created = Group.objects.get_or_create(name='Doctors')
             user.groups.add(doctor_group)
