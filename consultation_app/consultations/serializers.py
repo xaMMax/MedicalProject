@@ -59,26 +59,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    groups = serializers.PrimaryKeyRelatedField(many=True, queryset=Group.objects.all())
-    user_permissions = serializers.PrimaryKeyRelatedField(many=True, queryset=Permission.objects.all())
-
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address',
-                  'bio',
-                  'photo', 'groups', 'user_permissions']
-        extra_kwargs = {
-            'password': {'write_only': True}
-        }
-
-    def update(self, instance, validated_data):
-        photo = validated_data.pop('photo', None)
-        if photo:
-            instance.photo = photo
-        return super().update(instance, validated_data)
-
-
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True, validators=[validate_password])

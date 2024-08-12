@@ -9,7 +9,7 @@ from rest_framework_api_key.permissions import HasAPIKey
 
 from .models import Consultation, Message
 from .serializers import CustomUserSerializer, ConsultationSerializer, MessageSerializer, RegisterSerializer, \
-    ChangePasswordSerializer, UserProfileSerializer, LoginSerializer
+    ChangePasswordSerializer, LoginSerializer
 
 CustomUser = get_user_model()
 
@@ -57,13 +57,9 @@ class LoginView(APIView):
 
 
 class CustomUserViewSet(viewsets.ModelViewSet):
+    serializer_class = CustomUserSerializer
     queryset = CustomUser.objects.all()
     permission_classes = [IsAuthenticated]
-
-    def get_serializer_class(self):
-        if self.action == 'profile':
-            return CustomUserSerializer
-        return CustomUserSerializer
 
     @action(detail=False, methods=['get', 'put'], url_path='profile')
     def profile(self, request):
