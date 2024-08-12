@@ -15,7 +15,7 @@ from pathlib import Path
 
 import sentry_sdk
 from decouple import config
-import dj_database_url
+
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 SECRET_KEY = config('SECRET_KEY')
