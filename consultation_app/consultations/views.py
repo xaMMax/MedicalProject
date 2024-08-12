@@ -1,5 +1,7 @@
 from django.views.generic import TemplateView
 from rest_framework import viewsets, permissions, generics, status
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
@@ -10,12 +12,6 @@ from .serializers import CustomUserSerializer, ConsultationSerializer, MessageSe
     ChangePasswordSerializer, UserProfileSerializer, LoginSerializer
 
 CustomUser = get_user_model()
-
-
-class CustomUserViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
 
 
 class ConsultationViewSet(viewsets.ModelViewSet):
@@ -60,13 +56,26 @@ class LoginView(APIView):
         return Response(token_data, status=status.HTTP_200_OK)
 
 
-class UserProfileView(generics.RetrieveUpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
+class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
-    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
 
-    def get_object(self):
-        return self.request.user
+    def get_serializer_class(self):
+        if self.action == 'profile':
+            return UserProfileSerializer
+        return CustomUserSerializer
+
+    @action(detail=False, methods=['get', 'put'], url_path='profile')
+    def profile(self, request):
+        user = request.user
+        if request.method == 'PUT':
+            serializer = self.get_serializer(user, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            serializer = self.get_serializer(user)
+            return Response(serializer.data)
 
 
 class ChangePasswordView(generics.UpdateAPIView):

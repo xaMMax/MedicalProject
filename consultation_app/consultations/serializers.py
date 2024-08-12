@@ -9,9 +9,21 @@ from .models import Consultation, Message
 CustomUser = get_user_model()
 
 
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name']
+
+
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ['id', 'name', 'codename']
+
+
 class CustomUserSerializer(serializers.ModelSerializer):
-    groups = serializers.PrimaryKeyRelatedField(many=True, queryset=Group.objects.all())
-    user_permissions = serializers.PrimaryKeyRelatedField(many=True, queryset=Permission.objects.all())
+    groups = GroupSerializer(many=True, read_only=True)
+    user_permissions = PermissionSerializer(many=True, read_only=True)
 
     class Meta:
         model = CustomUser

@@ -6,14 +6,14 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import CustomUserViewSet, ConsultationViewSet, MessageViewSet, RegisterView, UserProfileView, \
+from .views import CustomUserViewSet, ConsultationViewSet, MessageViewSet, RegisterView, \
     ChangePasswordView, Test_pageView, LoginView
 
 router = DefaultRouter()
 router.register(r'users', CustomUserViewSet)
 router.register(r'consultations', ConsultationViewSet)
 router.register(r'messages', MessageViewSet)
-
+router.register(r'user', CustomUserViewSet)
 
 schema_view = get_schema_view(openapi.Info(title="Consultations API", default_version='v1',
                                            description="Test description",
@@ -31,7 +31,6 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/register/', RegisterView.as_view(), name='register'),
-    path('api/profile/', UserProfileView.as_view(), name='profile'),
     path('api/change-password/', ChangePasswordView.as_view(), name='change_password'),
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
