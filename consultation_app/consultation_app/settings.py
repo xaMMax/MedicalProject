@@ -175,7 +175,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://xammax.pythonanywhere.com",
     "http://192.168.1.12:8080",
     "http://192.168.1.12:3000",
-    "https://master--consultationsproj.netlify.app"
+    "https://master--consultationsproj.netlify.app",
+    "https://consul.netlify.app"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
