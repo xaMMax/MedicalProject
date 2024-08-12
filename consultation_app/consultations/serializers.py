@@ -31,7 +31,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address',
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_doctor', 'is_user',
+                  'phone', 'address',
                   'bio', 'photo', 'groups', 'user_permissions', 'group_ids', 'permission_ids', 'is_superuser']
         extra_kwargs = {
             'password': {'write_only': True}
@@ -59,7 +60,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
         if photo:
             instance.photo = photo
         return super().update(instance, validated_data)
-
 
 
 class ChangePasswordSerializer(serializers.Serializer):
