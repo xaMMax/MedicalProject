@@ -30,9 +30,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 
-ALLOWED_HOSTS = ['xammax.pythonanywhere.com', 'localhost', '127.0.0.1', '192.168.147.4', "192.168.1.12",]
-CORS_ORIGIN_ALLOW_ALL = True
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -169,6 +166,15 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http',)
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 X_FRAME_OPTIONS = 'DENY'  # DENY
+
+ALLOWED_HOSTS = [
+    'xammax.pythonanywhere.com',
+    'localhost',
+    '127.0.0.1',
+    '192.168.1.12',
+    'consul.netlify.app',
+]
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOWED_ORIGINS = [
     "https://localhost:3000",
