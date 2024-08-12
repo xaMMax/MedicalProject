@@ -62,7 +62,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == 'profile':
-            return UserProfileSerializer
+            return CustomUserSerializer
         return CustomUserSerializer
 
     @action(detail=False, methods=['get', 'put'], url_path='profile')
