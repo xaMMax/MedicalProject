@@ -13,6 +13,12 @@ router = DefaultRouter()
 router.register(r'users', CustomUserViewSet)
 router.register(r'consultations', ConsultationViewSet)
 router.register(r'messages', MessageViewSet)
+router.register(r'register', RegisterView)
+router.register(r'login', LoginView)
+router.register(r'token', TokenObtainPairView)
+router.register(r'token_refresh', TokenRefreshView)
+router.register(r'profile', UserProfileView)
+router.register(r'change_password', ChangePasswordView)
 
 schema_view = get_schema_view(openapi.Info(title="Consultations API", default_version='v1',
                                            description="Test description",
@@ -26,12 +32,6 @@ schema_view = get_schema_view(openapi.Info(title="Consultations API", default_ve
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/login/', LoginView.as_view(), name='login'),
-    path('api/register/', RegisterView.as_view(), name='register'),
-    path('api/profile/', UserProfileView.as_view(), name='profile'),
-    path('api/change-password/', ChangePasswordView.as_view(), name='change_password'),
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
