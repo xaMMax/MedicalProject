@@ -172,13 +172,13 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '192.168.1.12',
-    'consul.netlify.app',
+    'https://xammax.github.io/medical-project/',
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://192.168.1.12:3000",
-    "https://consul.netlify.app",
     "https://xammax.pythonanywhere.com",
+    "https://xammax.github.io/medical-project/"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
