@@ -38,8 +38,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    groups = serializers.StringRelatedField(many=True)
-    user_permissions = serializers.StringRelatedField(many=True)
+    groups = serializers.PrimaryKeyRelatedField(many=True, queryset=Group.objects.all())
+    user_permissions = serializers.PrimaryKeyRelatedField(many=True, queryset=Permission.objects.all())
 
     class Meta:
         model = CustomUser
