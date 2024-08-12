@@ -174,18 +174,16 @@ ALLOWED_HOSTS = [
     '192.168.1.12',
     'consul.netlify.app',
 ]
-CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost:3000",
-    "https://xammax.pythonanywhere.com",
-    "http://192.168.1.12:8080",
     "http://192.168.1.12:3000",
-    "https://master--consultationsproj.netlify.app",
-    "https://consul.netlify.app"
+    "https://consul.netlify.app",
+    "https://xammax.pythonanywhere.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
