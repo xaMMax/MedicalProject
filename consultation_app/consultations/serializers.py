@@ -9,25 +9,10 @@ from .models import Consultation, Message
 CustomUser = get_user_model()
 
 
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['id', 'name']
-
-
-class PermissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Permission
-        fields = ['id', 'name', 'codename']
-
-
 class CustomUserSerializer(serializers.ModelSerializer):
-    groups = GroupSerializer(many=True, read_only=True)
-    user_permissions = PermissionSerializer(many=True, read_only=True)
-    group_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=Group.objects.all(), write_only=True)
-    permission_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=Permission.objects.all(), write_only=True)
     is_superuser = serializers.BooleanField(read_only=True)
     is_doctor = serializers.BooleanField(read_only=True)
+    is_user = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = CustomUser
@@ -38,23 +23,15 @@ class CustomUserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        group_ids = validated_data.pop('group_ids', [])
-        permission_ids = validated_data.pop('permission_ids', [])
         user = CustomUser.objects.create_user(
             email=validated_data['email'],
             username=validated_data['username'],
             password=validated_data['password'],
             **validated_data
         )
-        user.groups.set(group_ids)
-        user.user_permissions.set(permission_ids)
         return user
 
     def update(self, instance, validated_data):
-        group_ids = validated_data.pop('group_ids', [])
-        permission_ids = validated_data.pop('permission_ids', [])
-        instance.groups.set(group_ids)
-        instance.user_permissions.set(permission_ids)
         photo = validated_data.pop('photo', None)
         if photo:
             instance.photo = photo
