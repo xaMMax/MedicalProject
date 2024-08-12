@@ -26,11 +26,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
     user_permissions = PermissionSerializer(many=True, read_only=True)
     group_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=Group.objects.all(), write_only=True)
     permission_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=Permission.objects.all(), write_only=True)
+    is_superuser = serializers.BooleanField(read_only=True)
+    is_doctor = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_doctor', 'is_user', 'phone', 'address',
-                  'bio', 'photo', 'groups', 'user_permissions', 'group_ids', 'permission_ids']
+                  'bio', 'photo', 'groups', 'user_permissions', 'group_ids', 'permission_ids', 'is_superuser']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -57,6 +59,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         if photo:
             instance.photo = photo
         return super().update(instance, validated_data)
+
 
 
 class ChangePasswordSerializer(serializers.Serializer):
