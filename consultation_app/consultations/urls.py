@@ -9,22 +9,27 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import CustomUserViewSet, ConsultationViewSet, MessageViewSet, RegisterView, \
     ChangePasswordView, Test_pageView, LoginView
 
+# Створюємо роутер та реєструємо ViewSets
 router = DefaultRouter()
 router.register(r'users', CustomUserViewSet)
 router.register(r'consultations', ConsultationViewSet)
 router.register(r'messages', MessageViewSet)
-router.register(r'user', CustomUserViewSet)
 
-schema_view = get_schema_view(openapi.Info(title="Consultations API", default_version='v1',
-                                           description="Test description",
-                                           terms_of_service="https://www.google.com/policies/terms/",
-                                           contact=openapi.Contact(email="contact@snippets.local"),
-                                           license=openapi.License(name="BSD License"),
-                                           ),
-                              public=True,
-                              permission_classes=[permissions.AllowAny,],
-                              )
+# Налаштовуємо схему документації
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Consultations API",
+        default_version='v1',
+        description="Test description",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@snippets.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
 
+# Визначаємо URL-патерни
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -32,12 +37,13 @@ urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/register/', RegisterView.as_view(), name='register'),
     path('api/change-password/', ChangePasswordView.as_view(), name='change_password'),
-    path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger<str:format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('api/home/', Test_pageView.as_view(), name='test'),
-
+    path('api/profile/', CustomUserViewSet.as_view({'get': 'profile', 'put': 'profile'}), name='profile'),
 ]
 
+# Додаємо обробку медіа-файлів у режимі DEBUG
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
