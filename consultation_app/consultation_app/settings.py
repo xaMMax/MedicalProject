@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 
-ALLOWED_HOSTS = ['xammax.pythonanywhere.com', 'localhost', '127.0.0.1', '192.168.147.4']
+ALLOWED_HOSTS = ['xammax.pythonanywhere.com', 'localhost', '127.0.0.1', '192.168.147.4', "192.168.1.12"]
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
@@ -172,7 +172,11 @@ X_FRAME_OPTIONS = 'DENY'  # DENY
 
 CORS_ALLOWED_ORIGINS = [
     "https://localhost:3000",
+    "https://xammax.pythonanywhere.com",
+    "http://192.168.1.12:8080"
 ]
+
+CORS_ALLOW_CREDENTIALS = True
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
