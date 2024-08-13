@@ -168,7 +168,7 @@ CSRF_COOKIE_SECURE = False
 X_FRAME_OPTIONS = 'DENY'  # DENY
 
 ALLOWED_HOSTS = [
-    'xammax.pythonanywhere.com',
+    'https://xammax.pythonanywhere.com',
     'localhost',
     '127.0.0.1',
     '192.168.1.12',
@@ -178,7 +178,7 @@ ALLOWED_HOSTS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://192.168.1.12:3000",
-    "https://xammax.pythonanywhere.com",
+    'https://xammax.pythonanywhere.com',
     "https://xammax.github.io",
     "https://xammax.github.io/medical-project",
 ]
