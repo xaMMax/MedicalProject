@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
-    'corsheaders',
     'consultations',
+    'corsheaders',
 
 ]
 
@@ -173,14 +173,12 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '192.168.1.12',
     "https://xammax.github.io",
-    "https://xammax.github.io/medical-project",
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://192.168.1.12:3000",
     'https://xammax.pythonanywhere.com',
     "https://xammax.github.io",
-    "https://xammax.github.io/medical-project",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
