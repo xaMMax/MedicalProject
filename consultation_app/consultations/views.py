@@ -74,6 +74,12 @@ class CustomUserViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(user)
             return Response(serializer.data)
 
+    @action(detail=False, methods=['get'], url_path='doctors')
+    def list_doctors(self, request):
+        doctors = self.queryset.filter(is_doctor=True)
+        serializer = self.get_serializer(doctors, many=True)
+        return Response(serializer.data)
+
 
 class ChangePasswordView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated | HasAPIKey]

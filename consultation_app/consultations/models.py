@@ -54,7 +54,6 @@ class CustomUser(AbstractUser):
         return self.email
 
 
-
 class Consultation(models.Model):
     doctor = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='doctor_consultations', on_delete=models.CASCADE)
     patient = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='patient_consultations',
