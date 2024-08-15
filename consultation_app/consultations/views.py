@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework_api_key.permissions import HasAPIKey
 
 from .models import Consultation, Message
-from .permissions import IsUser
+from .permissions import IsUser, IsMessageOwner
 from .serializers import CustomUserSerializer, ConsultationSerializer, MessageSerializer, RegisterSerializer, \
     ChangePasswordSerializer, LoginSerializer
 
@@ -22,9 +22,12 @@ class ConsultationViewSet(viewsets.ModelViewSet):
 
 
 class MessageViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated | HasAPIKey]
-    queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated, IsMessageOwner]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Message.objects.filter(sender=user) | Message.objects.filter(recipient=user)
 
     def perform_create(self, serializer):
         serializer.save(sender=self.request.user)
