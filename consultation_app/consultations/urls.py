@@ -42,6 +42,8 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('api/home/', Test_pageView.as_view(), name='test'),
     path('api/profile/', CustomUserViewSet.as_view({'get': 'profile', 'put': 'profile'}), name='profile'),
+    path('api/doctors/', CustomUserViewSet.as_view({'get': 'doctors'}), name='doctors-list'),
+
 ]
 
 # Додаємо обробку медіа-файлів у режимі DEBUG

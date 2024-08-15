@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework_api_key.permissions import HasAPIKey
 
 from .models import Consultation, Message
+from .permissions import IsUser
 from .serializers import CustomUserSerializer, ConsultationSerializer, MessageSerializer, RegisterSerializer, \
     ChangePasswordSerializer, LoginSerializer
 
@@ -77,6 +78,12 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='doctors')
     def list_doctors(self, request):
         doctors = self.queryset.filter(is_doctor=True)
+        serializer = self.get_serializer(doctors, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], permission_classes=[IsUser])
+    def doctors(self, request):
+        doctors = CustomUser.objects.filter(is_doctor=True)
         serializer = self.get_serializer(doctors, many=True)
         return Response(serializer.data)
 
