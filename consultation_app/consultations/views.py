@@ -24,6 +24,7 @@ class ConsultationViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated, IsMessageOwner]
+    queryset = Message.objects.all()
 
     def get_queryset(self):
         user = self.request.user
