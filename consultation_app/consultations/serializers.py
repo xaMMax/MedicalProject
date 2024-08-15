@@ -32,15 +32,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        # Перевіряємо, чи користувач є суперкористувачем
         request = self.context.get('request')
         if request and request.user.is_superuser:
-            # Дозволяємо зміну полів для суперкористувача
             instance.is_superuser = validated_data.get('is_superuser', instance.is_superuser)
             instance.is_doctor = validated_data.get('is_doctor', instance.is_doctor)
             instance.is_user = validated_data.get('is_user', instance.is_user)
 
-        # Оновлюємо інші поля
         photo = validated_data.pop('photo', None)
         if photo:
             instance.photo = photo
