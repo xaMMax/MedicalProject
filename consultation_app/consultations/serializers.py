@@ -40,9 +40,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
         photo = validated_data.pop('photo', None)
         if photo:
+            max_file_size = 1 * 1024 * 1024  # 1 MB
+            if photo.size > max_file_size:
+                raise serializers.ValidationError("Розмір файлу не повинен перевищувати 2MB.")
             instance.photo = photo
-
-        return super().update(instance, validated_data)
 
 
 class ChangePasswordSerializer(serializers.Serializer):
