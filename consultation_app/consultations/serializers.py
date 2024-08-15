@@ -11,8 +11,8 @@ CustomUser = get_user_model()
 
 class CustomUserSerializer(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField(read_only=True)
-    is_doctor = serializers.BooleanField(read_only=True)
-    is_user = serializers.BooleanField(read_only=True)
+    is_doctor = serializers.BooleanField()
+    is_user = serializers.BooleanField()
 
     class Meta:
         model = CustomUser
@@ -32,9 +32,19 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
+        # Перевіряємо, чи користувач є суперкористувачем
+        request = self.context.get('request')
+        if request and request.user.is_superuser:
+            # Дозволяємо зміну полів для суперкористувача
+            instance.is_superuser = validated_data.get('is_superuser', instance.is_superuser)
+            instance.is_doctor = validated_data.get('is_doctor', instance.is_doctor)
+            instance.is_user = validated_data.get('is_user', instance.is_user)
+
+        # Оновлюємо інші поля
         photo = validated_data.pop('photo', None)
         if photo:
             instance.photo = photo
+
         return super().update(instance, validated_data)
 
 
