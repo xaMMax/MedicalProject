@@ -194,7 +194,7 @@ EMAIL_HOST_USER = 'maks.t.test@gmail.com'
 EMAIL_HOST_PASSWORD = 'VfrcbvNt$nth2015'
 
 # URL for frontend
-FRONTEND_URL = 'https://localhost:3000'
+FRONTEND_URL = 'https://xammax.github.io/medical-project'
 
 AUTH_USER_MODEL = 'consultations.CustomUser'
 
@@ -211,8 +211,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'user': '1000/day',  # Кількість запитів на день для залогінених користувачів
-        'anon': '100/hour',  # Кількість запитів на годину для анонімних користувачів
+        'user': '100/day',  # Кількість запитів на день для залогінених користувачів
+        'anon': '10/hour',  # Кількість запитів на годину для анонімних користувачів
     },
 }
 
