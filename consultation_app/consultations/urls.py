@@ -13,7 +13,7 @@ from .views import CustomUserViewSet, ConsultationViewSet, MessageViewSet, Regis
 router = DefaultRouter()
 router.register(r'users', CustomUserViewSet)
 router.register(r'consultations', ConsultationViewSet)
-router.register(r'messages', MessageViewSet)
+router.register(r'messages', MessageViewSet, basename='messages')
 
 # Налаштовуємо схему документації
 schema_view = get_schema_view(
